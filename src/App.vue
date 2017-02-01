@@ -105,8 +105,13 @@
   }
 
   .mask {
-    padding: 50px 100px 50px 100px;
+    padding: 50px 0px 50px 0px;
     background: rgba( 256, 256, 256, 0.6);
     overflow: auto;
+  }
+  @media screen and (max-width: 767px) {
+    .mask {
+      padding: 0px;
+    }
   }
 </style>
