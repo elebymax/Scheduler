@@ -28,7 +28,7 @@
         $('#header-content').css('margin-top', (value-50)+'px');
       },
       goTutorial: function() {
-        $('html,body').animate({scrollTop:$('#quick-start').offset().top}, 2000, 'easeOutExpo');
+        $('html,body').animate({scrollTop:$('#quick-start').offset().top}, 1000, 'easeOutExpo');
       },
       goUpload: function() {
         this.$emit('toggle');
