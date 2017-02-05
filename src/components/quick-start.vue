@@ -26,7 +26,7 @@
 
   @media screen and (max-width: 767px){
     #quick-start {
-      padding: 50px 0px;
+      padding: 36px 0px;
     }
   }
 
