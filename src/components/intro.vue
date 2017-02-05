@@ -6,21 +6,21 @@
       <div class="intro-box-inner">
         <img src="../assets/forms.png">
         <h2>結合Google表單</h2>
-        <h4 class="gray">使用Google表單統計所有人的課表，能方便又快速地統整、匯出所有人員排班的資訊。</h4>
+        <h4 class="gray">使用Google表單統計所有人的課表，能方便又快速地統整所有人員排班的資訊。</h4>
       </div>
     </div>
     <div class="col-md-3 col-sm-6 col-xs-12 intro-box">
       <div class="intro-box-inner">
         <img src="../assets/calculator.png">
         <h2>班次平均且連續</h2>
-        <h4 class="gray">除了每人所分配到的班數幾近相同之外，也加入連班的算法，使班次盡可能連續，方便人員值班。</h4>
+        <h4 class="gray">在「公平」與「班次連續」間取得平衡，盡可能讓每人班數相同，同時班次也能連續，方便人員值班。</h4>
       </div>
     </div>
     <div class="col-md-3 col-sm-6 col-xs-12 intro-box">
       <div class="intro-box-inner">
         <img src="../assets/hand.png">
         <h2>一鍵排班</h2>
-        <h4 class="gray">將表單回覆匯出成csv檔後，上傳至此平台，輸入每班的人數，點擊『排班』，排班就馬上完成了！</h4>
+        <h4 class="gray">只需將Google表單的回覆匯出成csv檔，上傳至此平台，剩下就交給電腦囉！</h4>
       </div>
     </div>
     <div class="col-md-3 col-sm-6 col-xs-12 intro-box">
