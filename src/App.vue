@@ -13,12 +13,12 @@
       </div>
     </header>
     <intro></intro>
-    <!--<div class="mask"></div>-->
     <div id="start" style="">
       <div class="mask">
         <quick-start></quick-start>
       </div>
     </div>
+    <testing></testing>
     <footer id="footer">
       <h4>Copyright © 2017 Max, Lai 版權所有</h4>
       <h4>本站採AGPL授權，<a href="https://www.gnu.org/licenses/agpl-3.0.txt">授權條款</a></h4>
@@ -31,6 +31,7 @@
   import headerUpload from './components/header-upload'
   import intro from './components/intro'
   import quickStart from './components/quick-start'
+  import testing from './components/testing'
 
   export default {
     name: 'app',
@@ -43,7 +44,8 @@
     headerContent,
     headerUpload,
     intro,
-    quickStart
+    quickStart,
+    testing
   },
   methods: {
     toggle: function() {
@@ -106,7 +108,7 @@
 
   .mask {
     padding: 50px 0px 50px 0px;
-    background: rgba( 256, 256, 256, 0.6);
+    background: rgba( 256, 256, 256, 0.8);
     overflow: auto;
   }
   @media screen and (max-width: 767px) {
