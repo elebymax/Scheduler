@@ -18,7 +18,7 @@
   #testing {
     overflow: hidden;
     background-color: #eee;
-    padding: 50px;
+    padding: 18px;
   }
   #testing h3 {
     line-height: 1.65em;
