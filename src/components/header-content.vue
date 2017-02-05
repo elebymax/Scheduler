@@ -1,5 +1,5 @@
 <template>
-  <div id="header-content">
+  <div id="header-content" @resize="resizeContent">
     <h1>面對堆積如山的課表<br>你還在一張張對照再排班嗎？</h1>
     <a id="button_tutorial" class="col-xs-5 col-xs-offset-1 col-md-2 col-md-offset-4 button header-button header-button-normal" @click="goTutorial">使用說明</a>
     <a id="button_start" class="col-xs-5 col-md-2 col-md-offset-0 button header-button header-button-important" @click="goUpload">開始排班</a>
