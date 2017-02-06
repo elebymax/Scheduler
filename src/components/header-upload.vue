@@ -128,4 +128,8 @@
   #uploadBtn {
     width: 100%;
   }
+
+  .dropdown option {
+    color: #000;
+  }
 </style>
