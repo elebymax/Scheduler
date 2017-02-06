@@ -21,7 +21,7 @@
     <testing></testing>
     <footer id="footer">
       <h4>Copyright © 2017 <span><a href="http://www.elebymax.net">Max, Lai</a></span> 版權所有</h4>
-      <h4>本站採AGPL授權，<a href="https://www.gnu.org/licenses/agpl-3.0.txt">授權條款</a></h4>
+      <h4>本站採開放原始碼之AGPL授權，<a href="https://www.gnu.org/licenses/agpl-3.0.html">授權條款</a></h4>
     </footer>
   </div>
 </template>
