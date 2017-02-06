@@ -36,22 +36,32 @@
   export default {
     name: 'app',
     data () {
-    return {
-      isContent: true
+      return {
+        isContent: true
+      }
+    },
+    mounted () {
+      this.resizeHeader();
+    },
+    components: {
+      headerContent,
+      headerUpload,
+      intro,
+      quickStart,
+      testing
+    },
+    methods: {
+      toggle: function() {
+        this.isContent = !this.isContent;
+      },
+      resizeHeader: function () {
+        var windowWidth = $(window).width();
+        var windowHeight = $(window).height();
+        if(windowWidth<768) {
+          $("header").css('height', windowHeight+'px');
+        }
+      }
     }
-  },
-  components: {
-    headerContent,
-    headerUpload,
-    intro,
-    quickStart,
-    testing
-  },
-  methods: {
-    toggle: function() {
-      this.isContent = !this.isContent;
-    }
-  }
   }
 </script>
 
