@@ -2,7 +2,7 @@
 /**
  * Created by max on 2017/1/20.
  */
-var peopleCountInShift = 0;
+var peopleCountInShift = 0; //每班需要幾人
 
 var shifting = function (fileToRead, peopleCount) {
   peopleCountInShift = peopleCount;
@@ -50,13 +50,18 @@ var formatData = function (lines) {
   var argv2 = makeTotalAcceptableShiftsCountMap(totalAcceptableShiftsMap, daysCount);
   var totalAcceptableShiftsCountMap = argv2[0]; //每個班次可被排班的人數
   var shiftsCountInDayList = argv2[1]; //每天的總班次數
+  var totalShiftsCount = argv2[2]; //整個班表的總班數
 
-  var storageShiftsMap = putShiftsUnderLimitInStorageShiftsMap(totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList, shiftsCountInDayList, daysCount, peopleCountInShift);
+  var limitOfEachOneShiftsCount = Math.floor( (peopleCountInShift * peopleCount) / totalShiftsCount ); //每人最多能排的班數
+  console.log(limitOfEachOneShiftsCount);
+  var remainderShiftsCount = (peopleCountInShift * peopleCount) % totalShiftsCount; //多餘的班數
+
+  var storageShiftsMap = putShiftsUnderLimitInStorageShiftsMap(totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList, shiftsCountInDayList, daysCount, peopleCountInShift, limitOfEachOneShiftsCount, remainderShiftsCount);
   //console.log(storageShiftsMap);
   var finishedShiftsMap = correspondKeyToName(storageShiftsMap, nameList, daysCount);
   //console.log(finishedShiftsMap);
   var table = changeMapToTable(storageShiftsMap, finishedShiftsMap, daysNameList, shiftNameList, daysCount);
-
+  console.log(peopleAlreadyBeenShiftCountList);
   convertToCsv(table);
 };
 
@@ -128,34 +133,38 @@ var makeTotalAcceptableShiftsMap = function(lines, daysOrderList, daysCount, peo
 var makeTotalAcceptableShiftsCountMap = function(totalAcceptableShiftsMap, daysCount) {
   var totalAcceptableShiftsCountMap = [];
   var shiftsCountInDayList = [];
+  var totalShiftsCount = 0;
   for(var i=0;i<daysCount;i++) {
     totalAcceptableShiftsCountMap.push([]);
     shiftsCountInDayList[i] = totalAcceptableShiftsMap[i].length;
+    totalShiftsCount += shiftsCountInDayList[i];
     for(var j=0;j<shiftsCountInDayList[i];j++) {
       totalAcceptableShiftsCountMap[i][j] = totalAcceptableShiftsMap[i][j].length;
     }
   }
-  return [totalAcceptableShiftsCountMap, shiftsCountInDayList];
+  return [totalAcceptableShiftsCountMap, shiftsCountInDayList, totalShiftsCount];
 };
 
-var putShiftsUnderLimitInStorageShiftsMap = function(totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList, shiftsCountInDayList, daysCount, peopleCountInShift) {
+var putShiftsUnderLimitInStorageShiftsMap = function(totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList, shiftsCountInDayList, daysCount, peopleCountInShift, limitOfEachOneShiftsCount, remainderShiftsCount) {
   var storageShiftsMap = [];
   for(var i=0;i<daysCount;i++) {
     storageShiftsMap[i] = [];
     for(var j=0;j<shiftsCountInDayList[i];j++) {
       storageShiftsMap[i][j] = [];
-      if(( totalAcceptableShiftsCountMap[i][j]>0 )&&( totalAcceptableShiftsCountMap[i][j]<=peopleCountInShift )) {
+      if(( totalAcceptableShiftsCountMap[i][j] > 0 ) && ( totalAcceptableShiftsCountMap[i][j] <= peopleCountInShift )) {
         for(var k=0;k<totalAcceptableShiftsMap[i][j].length;k++) {
-          peopleAlreadyBeenShiftCountList[totalAcceptableShiftsMap[i][j][k]]++;
-          storageShiftsMap[i][j].push(totalAcceptableShiftsMap[i][j][k]);
+          if(peopleAlreadyBeenShiftCountList[totalAcceptableShiftsMap[i][j][k]] <= limitOfEachOneShiftsCount) {
+            peopleAlreadyBeenShiftCountList[totalAcceptableShiftsMap[i][j][k]]++;
+            storageShiftsMap[i][j].push(totalAcceptableShiftsMap[i][j][k]);
+          }
         }
       }
     }
   }
-  return putShiftsOverLimitInStorageShiftsMap(storageShiftsMap, totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList, shiftsCountInDayList, daysCount, peopleCountInShift);
+  return putShiftsOverLimitInStorageShiftsMap(storageShiftsMap, totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList, shiftsCountInDayList, daysCount, peopleCountInShift, limitOfEachOneShiftsCount, remainderShiftsCount);
 };
 
-var putShiftsOverLimitInStorageShiftsMap = function(storageShiftsMap, totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList, shiftsCountInDayList, daysCount, peopleCountInShift) {
+var putShiftsOverLimitInStorageShiftsMap = function(storageShiftsMap, totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList, shiftsCountInDayList, daysCount, peopleCountInShift, limitOfEachOneShiftsCount, remainderShiftsCount) {
   for(var i=0;i<daysCount;i++) {
     for(var j=0;j<shiftsCountInDayList[i];j++) {
       if(totalAcceptableShiftsCountMap[i][j] > peopleCountInShift) {
@@ -165,7 +174,10 @@ var putShiftsOverLimitInStorageShiftsMap = function(storageShiftsMap, totalAccep
 
         fairPriorityList = makeFairPriorityList( i, j, totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList);
         continuousPriorityList = makeContinuousPriorityList( i, j, storageShiftsMap, totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList);
-        storageShiftsMap = compareWithTwoPriority( i, j, storageShiftsMap, peopleAlreadyBeenShiftCountList, fairPriorityList, continuousPriorityList, peopleCountInShift);
+        var argv = compareWithTwoPriority( i, j, storageShiftsMap, peopleAlreadyBeenShiftCountList, fairPriorityList, continuousPriorityList, peopleCountInShift, limitOfEachOneShiftsCount, remainderShiftsCount);
+        storageShiftsMap = argv[0];
+        peopleAlreadyBeenShiftCountList = argv[1];
+        remainderShiftsCount = argv[2];
       }
     }
   }
@@ -238,7 +250,7 @@ var makeContinuousPriorityList = function(day, shift, storageShiftsMap, totalAcc
   return continuousPriorityList;
 };
 
-var compareWithTwoPriority = function( day, shift, storageShiftsMap, peopleAlreadyBeenShiftCountList, fairPriorityList, continuousPriorityList, peopleCountInShift) {
+var compareWithTwoPriority = function( day, shift, storageShiftsMap, peopleAlreadyBeenShiftCountList, fairPriorityList, continuousPriorityList, peopleCountInShift, limitOfEachOneShiftsCount, remainderShiftsCount) {
   //先取第一個陣列裡的一個值，再找第二個陣列裡相同的值，把兩個的index相加存在一個陣列，而再以這個陣列的index再做一個陣列作為索引，對應到key
   var prioritySumList = []; //所有優先權加總
   var prioritySumCloneList;
@@ -248,7 +260,7 @@ var compareWithTwoPriority = function( day, shift, storageShiftsMap, peopleAlrea
   for(var i=0;i<fairPriorityList.length;i++) {
     for(var j=0;j<continuousPriorityList.length;j++) {
       if(fairPriorityList[i] == continuousPriorityList[j]) {
-        prioritySumList[i] = i+j;
+        prioritySumList[i] = Math.floor(i/2)+j;
         map[i] = fairPriorityList[i];
       }
     }
@@ -257,9 +269,19 @@ var compareWithTwoPriority = function( day, shift, storageShiftsMap, peopleAlrea
   prioritySumCloneList = JSON.parse(JSON.stringify(prioritySumList));
   prioritySumList = prioritySumList.sort(function (a, b) {return a - b});
 
-  for(var i=0;i<prioritySumList.length;i++) {
-    for(var j=0;j<prioritySumCloneList.length;j++) {
-      if(prioritySumList[i]==prioritySumCloneList[j]) {
+  for(var i=0 ; i<prioritySumList.length ; i++) {
+    for(var j=0 ; j<prioritySumCloneList.length ; j++) {
+      if( (prioritySumList[i] === prioritySumCloneList[j]) && (peopleAlreadyBeenShiftCountList[map[j]] < limitOfEachOneShiftsCount) ) {
+          resultPriority.push(map[j]);
+          prioritySumCloneList[j] = -1;
+          break;
+      }
+    }
+  }
+
+  for(var i=0 ; i<prioritySumList.length ; i++) {
+    for(var j=0 ; j<prioritySumCloneList.length ; j++) {
+      if(prioritySumList[i] === prioritySumCloneList[j]) {
         resultPriority.push(map[j]);
         prioritySumCloneList[j] = -1;
         break;
@@ -272,7 +294,7 @@ var compareWithTwoPriority = function( day, shift, storageShiftsMap, peopleAlrea
     peopleAlreadyBeenShiftCountList[resultPriority[i]]++;
   }
 
-  return storageShiftsMap;
+  return [storageShiftsMap, peopleAlreadyBeenShiftCountList, remainderShiftsCount];
 };
 
 var correspondKeyToName = function( storageShiftsMap, namesList, daysCount) {
