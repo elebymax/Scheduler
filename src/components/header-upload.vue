@@ -1,6 +1,6 @@
 <template>
   <div id="header-upload" @resize="resizeUpload">
-    <h1 class="bold">上傳你的表單</h1>
+    <h1 class="bold">目前網站BUG修復中，請稍待！</h1>
     <select class="dropdown col-xs-10 col-xs-offset-1 col-md-4 col-md-offset-4 " v-model="peopleCount">
       <option value="1">每班次需1人</option>
       <option value="2">每班次需2人</option>
@@ -63,7 +63,7 @@
         }
       },
       startShifting: function () {
-        Compute.shifting(this.file, this.peopleCount);
+        // Compute.shifting(this.file, this.peopleCount);
       }
     }
   }
