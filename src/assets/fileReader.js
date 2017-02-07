@@ -59,16 +59,18 @@ var checkShiftFormat = function (daysCount, lines) {
     for (var j = 1; j < daysCount.length; j++) {
       var shifts = lines[i][daysCount[j]].split(';')
       for (var k = 0; k < shifts.length; k++) {
-        if (!shifts[k].includes('.')) {
-          window.alert('班數設定錯誤，未包含\'.\'。')
-          return
-        }
-        var index = shifts[k].split('.')
-        var num = parseInt(index[0])
-        if (num === 0) {
-          window.alert('班數設定錯誤，不可使用\'0\'，請從\'1\'開始。')
-        } else if (!(num > 0)) {  //
-          window.alert('班數設定錯誤，不可使用除數字以外其他字符！')
+        if(shifts[0]!='') {
+          if (!shifts[k].includes('.')) {
+            window.alert('班數設定錯誤，未包含\'.\'。')
+            return
+          }
+          var index = shifts[k].split('.')
+          var num = parseInt(index[0])
+          if (num === 0) {
+            window.alert('班數設定錯誤，不可使用\'0\'，請從\'1\'開始。')
+          } else if (!(num > 0)) {  //
+            window.alert('班數設定錯誤，不可使用除數字以外其他字符！')
+          }
         }
       }
     }
