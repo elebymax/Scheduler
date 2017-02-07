@@ -44,7 +44,6 @@ var formatData = function (lines) {
 
   var argv1 = makeTotalAcceptableShiftsMap(lines, daysOrderList, daysCount, peopleCount);
   var totalAcceptableShiftsMap = argv1[0]; //每個班次可被排班的人，以編號表示
-  console.log(totalAcceptableShiftsMap);
   var shiftNameList = argv1[1]; //每個班次的名稱
 
   var argv2 = makeTotalAcceptableShiftsCountMap(totalAcceptableShiftsMap, daysCount);
@@ -53,7 +52,6 @@ var formatData = function (lines) {
   var totalShiftsCount = argv2[2]; //整個班表的總班數
 
   var limitOfEachOneShiftsCount = Math.floor( (peopleCountInShift * peopleCount) / totalShiftsCount ); //每人最多能排的班數
-  console.log(limitOfEachOneShiftsCount);
   var remainderShiftsCount = (peopleCountInShift * peopleCount) % totalShiftsCount; //多餘的班數
 
   var storageShiftsMap = putShiftsUnderLimitInStorageShiftsMap(totalAcceptableShiftsMap, totalAcceptableShiftsCountMap, peopleAlreadyBeenShiftCountList, shiftsCountInDayList, daysCount, peopleCountInShift, limitOfEachOneShiftsCount, remainderShiftsCount);
@@ -61,7 +59,6 @@ var formatData = function (lines) {
   var finishedShiftsMap = correspondKeyToName(storageShiftsMap, nameList, daysCount);
   //console.log(finishedShiftsMap);
   var table = changeMapToTable(storageShiftsMap, finishedShiftsMap, daysNameList, shiftNameList, daysCount);
-  console.log(peopleAlreadyBeenShiftCountList);
   convertToCsv(table);
 };
 
