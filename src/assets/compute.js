@@ -142,7 +142,6 @@ var makeTotalAcceptableShiftsCountMap = function(totalAcceptableShiftsMap, daysC
   var totalShiftsCount = 0;
   for(var i=0;i<daysCount;i++) {
     totalAcceptableShiftsCountMap.push([]);
-    console.log(totalAcceptableShiftsMap[i]);
     shiftsCountInDayList[i] = totalAcceptableShiftsMap[i].length;
     totalShiftsCount += shiftsCountInDayList[i];
     for(var j=0;j<shiftsCountInDayList[i];j++) {
