@@ -46,8 +46,6 @@ var formatData = function (lines) {
   var totalAcceptableShiftsMap = argv1[0]; //每個班次可被排班的人，以編號表示
   var shiftNameList = argv1[1]; //每個班次的名稱
 
-  console.log(totalAcceptableShiftsMap);
-
   var argv2 = makeTotalAcceptableShiftsCountMap(totalAcceptableShiftsMap, daysCount);
   var totalAcceptableShiftsCountMap = argv2[0]; //每個班次可被排班的人數
   var shiftsCountInDayList = argv2[1]; //每天的總班次數
@@ -60,8 +58,6 @@ var formatData = function (lines) {
   var finishedShiftsMap = correspondKeyToName(storageShiftsMap, nameList, daysCount);
   //console.log(finishedShiftsMap);
   var table = changeMapToTable(storageShiftsMap, finishedShiftsMap, daysNameList, shiftNameList, daysCount);
-
-  console.log(peopleAlreadyBeenShiftCountList);
 
   convertToCsv(table);
 };
