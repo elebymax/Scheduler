@@ -3,13 +3,14 @@
 import Vue from 'vue'
 import App from './App'
 import $ from 'jquery'
+import _ from 'lodash'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap/dist/js/bootstrap.min.js'
-require('jquery-ui-bundle')
+require('jquery-ui-bundle');
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   template: '<App/>',
   components: { App }
-})
+});
