@@ -3,21 +3,28 @@
  */
 
 let peopleInfoList;
+let peopleAvailableToShiftMap;
 
-exports.peopleCountUnderLimitInToResultTable = async function (infoList, peopleAvailableToShiftMap, colsCount, rowsCount, peopleCountInShift, limitCount) {
+exports.peopleCountUnderLimitInToResultTable = async function (infoList, availableToShiftMap, colsCount, rowsCount, peopleCountInShift, limitCount) {
   peopleInfoList = infoList;
+  peopleAvailableToShiftMap = availableToShiftMap;
   let resultTableMap = await makeEmptyMap(colsCount, rowsCount);
 
   for (var i=0; i<colsCount; i++) {
     for (var j=0; j<rowsCount; j++) {
-      const idList = peopleAvailableToShiftMap[i][j];
+      let idList = peopleAvailableToShiftMap[i][j];
       if ( idList.length <= peopleCountInShift ) {
         resultTableMap[i][j] = await handlePeopleList(idList, limitCount);
+        peopleAvailableToShiftMap[i][j] = peopleAvailableToShiftMap[i][j].filter(val => !resultTableMap[i][j].includes(val));
       }
     }
   }
 
-  return Promise.resolve(resultTableMap);
+  return Promise.resolve({
+    resultTableMap,
+    peopleInfoList,
+    peopleAvailableToShiftMap
+  });
 };
 
 var handlePeopleList = async function (idList, limitCount) {

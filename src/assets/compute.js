@@ -51,9 +51,12 @@ var formatData = async function (lines) {
   let peopleInfoList = await HandlePeopleInfo.handlePeopleInfo(LINES_NUMBER_FROM, lines, colsAttrList, rowsMaxNumber);
   let peopleAvailableToShiftMap = await HandlePeopleAvailableToShift.peopleAvailableToShift( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
   peopleInfoList = await HandlePeoplePriority.peoplePriorityList( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
-  resultTableMap = await HandlePeopleCountUnderLimitInToResultTable.peopleCountUnderLimitInToResultTable( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber, peopleCountInShift, limitOfEachOneShiftsCount );
+  let result = await HandlePeopleCountUnderLimitInToResultTable.peopleCountUnderLimitInToResultTable( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber, peopleCountInShift, limitOfEachOneShiftsCount );
+  resultTableMap = result.resultTableMap;
+  peopleInfoList = result.peopleInfoList;
+  peopleAvailableToShiftMap = result.peopleAvailableToShiftMap;
 
-  console.log(resultTableMap);
+  console.log(peopleAvailableToShiftMap);
 };
 
 var compute = {
