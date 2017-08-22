@@ -30,7 +30,7 @@ exports.findRowsAttr = async function ( linesNumberFrom,  lines, colsAttrList ) 
 
   let shiftsPositionList = [];
   for (var i=0; i<colsAttrList.length; i++) {
-    if (colsAttrList[i].position !== 0) {
+    if (colsAttrList[i].number != 0) {
       shiftsPositionList.push(colsAttrList[i].position);
     }
   }
