@@ -2,7 +2,7 @@
  * Created by max on 2017/8/22.
  */
 
-exports.peopleAvailableToShift = async function ( peopleInfoList, colsCount, rowsCount) {
+exports.peopleAvailableToShift = async function ( peopleInfoList, colsCount, rowsCount ) {
 
   let peopleAvailableToShiftMap = await makeEmptyMap(colsCount, rowsCount);
 
