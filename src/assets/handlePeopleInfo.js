@@ -15,8 +15,10 @@ exports.handlePeopleInfo = async function ( linesNumberFrom,  lines, colsAttrLis
     }
   }
 
+  let id = 0;
   for (var i=linesNumberFrom; i<lines.length; i++) {
     let personInfo = {
+      id: id,
       name: lines[i][namePosition],
       lastCount: 0,
       usedCount: 0,
@@ -26,6 +28,7 @@ exports.handlePeopleInfo = async function ( linesNumberFrom,  lines, colsAttrLis
     personInfo.shiftsMap = result.shiftsMap;
     personInfo.lastCount = result.shiftsCount;
     peopleInfoMap.push(personInfo);
+    id++;
   }
 
   return Promise.resolve(peopleInfoMap);
