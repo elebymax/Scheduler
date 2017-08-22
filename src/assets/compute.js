@@ -7,7 +7,7 @@ var HandlePeopleInfo = require('./handlePeopleInfo');
 var HandlePeopleAvailableToShift = require('./handlePeopleAvailableToShift');
 var HandlePeoplePriority = require('./handlePeoplePriority');
 var HandlePeopleCountUnderLimitInToResultTable = require('./handlePeopleCountUnderLimitInToResultTable');
-var HandlePriorityRank = require('./handlePeoplePriority');
+var HandlePriorityRank = require('./handlePriorityRank');
 
 var peopleCountInShift = 0; //每班需要幾人
 const LINES_NUMBER_FROM = 1;
@@ -56,9 +56,9 @@ var formatData = async function (lines) {
   resultTableMap = result.resultTableMap;
   peopleInfoList = result.peopleInfoList;
   peopleAvailableToShiftMap = result.peopleAvailableToShiftMap;
-  peopleInfoList = await HandlePriorityRank.addLastCountPriorityRank( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber );
+  peopleInfoList = await HandlePriorityRank.priorityRank( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber );
 
-  console.log(peopleAvailableToShiftMap);
+  console.log(peopleInfoList);
 };
 
 var compute = {
