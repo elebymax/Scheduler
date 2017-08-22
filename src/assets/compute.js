@@ -55,6 +55,7 @@ var formatData = async function (lines) {
   resultTableMap = result.resultTableMap;
   peopleInfoList = result.peopleInfoList;
   peopleAvailableToShiftMap = result.peopleAvailableToShiftMap;
+  
 
   console.log(peopleAvailableToShiftMap);
 };
