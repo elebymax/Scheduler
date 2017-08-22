@@ -5,6 +5,7 @@
 var FindAttrList = require('./findAttrList');
 var HandlePeopleInfo = require('./handlePeopleInfo');
 var HandlePeopleAvailableToShift = require('./handlePeopleAvailableToShift');
+var HandlePeoplePriority = require('./handlePeoplePriorityList');
 
 var peopleCountInShift = 0; //每班需要幾人
 const LINES_NUMBER_FROM = 1;
@@ -44,6 +45,7 @@ var formatData = async function (lines) {
   let rowsMaxNumber = rowsAttrList[rowsAttrList.length-1].number;
   let peopleInfoList = await HandlePeopleInfo.handlePeopleInfo(LINES_NUMBER_FROM, lines, colsAttrList, rowsMaxNumber);
   let peopleAvailableToShiftMap = await HandlePeopleAvailableToShift.peopleAvailableToShift( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
+  let peoplePriorityList = await HandlePeoplePriority.peoplePriority();
 
   console.log(peopleAvailableToShiftMap);
 };
