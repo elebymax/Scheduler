@@ -3,6 +3,7 @@
  * Created by max on 2017/1/20.
  */
 var FindAttrList = require('./findAttrList');
+var HandlePeopleInfo = require('./handlePeopleInfo');
 
 var peopleCountInShift = 0; //每班需要幾人
 const LINES_NUMBER_FROM = 1;
@@ -39,9 +40,10 @@ var formatData = async function (lines) {
 
   let colsAttrList = await FindAttrList.findColsAttr(lines[0]);
   let rowsAttrList = await FindAttrList.findRowsAttr(LINES_NUMBER_FROM, lines, colsAttrList);
-  // let peopleInfoList = await handlePeopleInfo(lines, colsAttrList[0].position);
+  let rowsMaxNumber = rowsAttrList[rowsAttrList.length-1].number;
+  let peopleInfoList = await HandlePeopleInfo.handlePeopleInfo(LINES_NUMBER_FROM, lines, colsAttrList, rowsMaxNumber);
 
-  console.log(rowsAttrList);
+  console.log(peopleInfoList);
 };
 
 var compute = {
