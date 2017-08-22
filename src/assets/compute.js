@@ -43,7 +43,7 @@ var formatData = async function (lines) {
   let rowsAttrList = await FindAttrList.findRowsAttr(LINES_NUMBER_FROM, lines, colsAttrList);
   let rowsMaxNumber = rowsAttrList[rowsAttrList.length-1].number;
   let peopleInfoList = await HandlePeopleInfo.handlePeopleInfo(LINES_NUMBER_FROM, lines, colsAttrList, rowsMaxNumber);
-  let notShiftYetTableMap = await HandleNotShiftYetTable.handleNotShiftYetTable();
+  // let notShiftYetTableMap = await HandleNotShiftYetTable.handleNotShiftYetTable();
 
   // console.log(peopleInfoList);
 };
