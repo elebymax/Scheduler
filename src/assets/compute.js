@@ -37,11 +37,11 @@ var formatData = async function (lines) {
 
   let colsAttrList = await findColsAttr(lines[0]);
   let rowsAttrList = await findRowsAttr(lines, colsAttrList);
-  console.log(rowsAttrList);
 
+  console.log(colsAttrList);
 };
 
-let findColsAttr = async function ( firstLine ) {
+const findColsAttr = async function ( firstLine ) {
 
   var resultList = [];
 
@@ -65,7 +65,7 @@ let findColsAttr = async function ( firstLine ) {
 
 };
 
-let findRowsAttr = async function ( lines, colsAttrList ) {
+const findRowsAttr = async function ( lines, colsAttrList ) {
 
   let shiftsPositionList = [];
   for (var i=0; i<colsAttrList.length; i++) {
@@ -74,49 +74,32 @@ let findRowsAttr = async function ( lines, colsAttrList ) {
     }
   }
 
-  let maxShiftsNumber = 0;
   let rowNameList = [];
   for (var i=LINES_NUMBER_FROM; i<lines.length; i++) {
     for (var j=0; j<shiftsPositionList.length; j++) {
       const shiftsPosition = shiftsPositionList[j];
       const personShiftsList = lines[i][shiftsPosition].split(";");
       for (var k=0; k<personShiftsList.length; k++) {
-        console.log()
         const string = personShiftsList[k];
         const regex = /([0-9]+)[.]{1}([^\\s]+$)/g;
         var match = regex.exec(string);
         if (match) {
-          const number = match[1];
-          if ( maxShiftsNumber < number ) {
-            maxShiftsNumber = number;
-          }
-          if ( !checkIfNumberAlreadyInObjectList(rowNameList, number) ) {
-            const rowName = {
-              number: number,
-              name: match[2]
-            };
-            rowNameList.push(rowName);
-          }
+          const rowName = {
+            number: match[1],
+            name: match[2]
+          };
+          rowNameList.push(rowName);
         }
       }
     }
   }
-
+  rowNameList = _.uniqBy(rowNameList, 'number');
   rowNameList = await sortObjectInListByNumber(rowNameList);
 
   return Promise.resolve(rowNameList);
 };
 
-let checkIfNumberAlreadyInObjectList = function (list, number) {
-  for (var i=0; i<list.length; i++) {
-    if (list[i].number === number) {
-      return true;
-    }
-  }
-  return false;
-};
-
-let sortObjectInListByNumber = async function (list) {
+const sortObjectInListByNumber = async function (list) {
   return Promise.resolve( list.sort(function (a, b) {
     return a.number > b.number ? 1 : -1;
   }) );
