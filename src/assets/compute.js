@@ -10,7 +10,7 @@ var HandleResultTable = require('./handleResultTable');
 
 let peopleCountInShift = 0; //每班需要幾人
 let limitOfEachOneShiftsCount = 0;
-let isUserSetShiftLimit = true;
+let isUserSetShiftLimit = false;
 const LINES_NUMBER_FROM = 1;
 
 var shifting = function (fileToRead, peopleCount) {
@@ -49,8 +49,8 @@ var formatData = async function (lines) {
   let colsAttrList = await FindAttrList.findColsAttr( lines[0] );
   let rowsAttrList = await FindAttrList.findRowsAttr( LINES_NUMBER_FROM, lines, colsAttrList );
   let totalShiftsCount = (colsAttrList.length-1) * rowsAttrList.length;
-  // limitOfEachOneShiftsCount = Math.floor( ( peopleCountInShift * totalShiftsCount ) / peopleCount );
-  limitOfEachOneShiftsCount = 3;
+  limitOfEachOneShiftsCount = Math.floor( ( peopleCountInShift * totalShiftsCount ) / peopleCount );
+  // limitOfEachOneShiftsCount = 3;
   let rowsMaxNumber = rowsAttrList[rowsAttrList.length-1].number;
   let peopleInfoList = await HandlePeopleInfo.handlePeopleInfo( LINES_NUMBER_FROM, lines, colsAttrList, rowsMaxNumber );
   let peopleAvailableToShiftMap = await HandlePeopleAvailableToShift.peopleAvailableToShift( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );

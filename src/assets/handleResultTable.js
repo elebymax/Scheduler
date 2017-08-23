@@ -84,12 +84,25 @@ let handlePriorityRanking = async function ( idList, currentCol, currentRow, peo
   for(var k=0; k<peopleList.length; k++) {
     for (var l=0; l<peopleInfoList.length; l++) {
       const personInfo = peopleInfoList[l];
-      if ( peopleList[k].id === personInfo.id && resultList.length < peopleCountInShift && personInfo.lastCount > 0 ) {
-        if ( personInfo.usedCount < limitOfEachOneShiftsCount && isUserSetShiftLimit ) {
+      if ( peopleList[k].id === personInfo.id && resultList.length < peopleCountInShift && personInfo.usedCount < limitOfEachOneShiftsCount && personInfo.lastCount > 0 ) {
+        if ( isUserSetShiftLimit ) {
           resultList.push( peopleList[k].id );
           personInfo.usedCount++;
           personInfo.lastCount--;
-        } else if ( personInfo.usedCount < (limitOfEachOneShiftsCount+1) && !isUserSetShiftLimit ) {
+        } else {
+          resultList.push( peopleList[k].id );
+          personInfo.usedCount++;
+          personInfo.lastCount--;
+        }
+      }
+    }
+  }
+
+  if ( !isUserSetShiftLimit ) {
+    for(var k=0; k<peopleList.length; k++) {
+      for (var l=0; l<peopleInfoList.length; l++) {
+        const personInfo = peopleInfoList[l];
+        if ( peopleList[k].id === personInfo.id && resultList.length < peopleCountInShift && personInfo.lastCount > 0 ) {
           resultList.push( peopleList[k].id );
           personInfo.usedCount++;
           personInfo.lastCount--;
