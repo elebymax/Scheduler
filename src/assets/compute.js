@@ -7,6 +7,7 @@ var HandlePeopleInfo = require('./handlePeopleInfo');
 var HandlePeopleAvailableToShift = require('./handlePeopleAvailableToShift');
 var HandlePeopleCountUnderLimitInToResultTable = require('./handlePeopleCountUnderLimitInToResultTable');
 var HandleResultTable = require('./handleResultTable');
+var HandleChangeIdToName = require('./handleChangeIdToName');
 
 let peopleCountInShift = 0; //每班需要幾人
 let limitOfEachOneShiftsCount = 0;
@@ -76,6 +77,8 @@ var formatData = async function (lines) {
   resultTableMap = result2.resultTableMap;
   peopleInfoList = result2.peopleInfoList;
   peopleAvailableToShiftMap = result2.peopleAvailableToShiftMap;
+
+  resultTableMap = await HandleChangeIdToName.changeIdToName( resultTableMap, peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
 
   console.log(resultTableMap);
   console.log(peopleInfoList);
