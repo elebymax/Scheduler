@@ -19,7 +19,7 @@ exports.handleResultTable = async function ( resultTable, peopleInfo, peopleAvai
       let idList = peopleAvailableToShiftMap[i][j];
       peopleInfoList = await handlePersonPriority( idList, peopleInfoList, i, j );
       peopleInfoList = await handleContinuousPeopleInfoList( idList, peopleInfoList, colsCount, rowsCount, i, j );
-      peopleInfoList = await handleLastCountPeopleInfoList( idList, peopleInfoList );
+      peopleInfoList = await handleGapCountPeopleInfoList( idList, peopleInfoList, limitOfEachOneShiftsCount );
       resultTableMap[i][j] = await handlePriorityRanking( idList, i, j, peopleCountInShift, limitOfEachOneShiftsCount, isUserSetShiftLimit );
       peopleAvailableToShiftMap[i][j] = peopleAvailableToShiftMap[i][j].filter(val => !resultTableMap[i][j].includes(val));
     }
@@ -69,7 +69,7 @@ let handlePriorityRanking = async function ( idList, currentCol, currentRow, peo
       if ( idList[k] === personInfo.id ) {
         const person = {
           id: personInfo.id,
-          priorityRank: parseInt(personInfo.lastCountWeight) + parseInt(personInfo.continuousWeightMap[currentCol][currentRow])
+          priorityRank: parseInt(personInfo.gapCountWeight) + parseInt(personInfo.continuousWeightMap[currentCol][currentRow])
         };
         peopleList.push(person);
       }
@@ -115,7 +115,7 @@ let handlePriorityRanking = async function ( idList, currentCol, currentRow, peo
 
 };
 
-var handleLastCountPeopleInfoList = async function ( idList, peopleInfoList ) {
+var handleGapCountPeopleInfoList = async function ( idList, peopleInfoList, limitOfEachOneShiftsCount ) {
   let peopleList = [];
 
   for(var i=0; i<idList.length; i++) {
@@ -124,7 +124,7 @@ var handleLastCountPeopleInfoList = async function ( idList, peopleInfoList ) {
       if ( idList[i] === personInfo.id ) {
         const last = {
           id: personInfo.id,
-          lastCount: personInfo.lastCount
+          gapCount: limitOfEachOneShiftsCount - personInfo.usedCount
         };
         peopleList.push(last)
       }
@@ -132,17 +132,17 @@ var handleLastCountPeopleInfoList = async function ( idList, peopleInfoList ) {
   }
 
   peopleList = peopleList.sort(function (a, b) {
-    return a.lastCount < b.lastCount ? 1 : -1;
+    return a.gapCount > b.gapCount ? 1 : -1;
   });
 
   let weight = 0;
   for(var i=0; i<peopleList.length; i++) {
     if ( i === 0 ) {
-      peopleList[i].lastCountWeight = 0;
-    } else if ( peopleList[i].lastCount === peopleList[i-1].lastCount ) {
-      peopleList[i].lastCountWeight = weight;
+      peopleList[i].gapCountWeight = 0;
+    } else if ( peopleList[i].gapCount === peopleList[i-1].gapCount ) {
+      peopleList[i].gapCountWeight = weight;
     } else {
-      peopleList[i].lastCountWeight = ++weight;
+      peopleList[i].gapCountWeight = ++weight;
     }
   }
 
@@ -150,7 +150,7 @@ var handleLastCountPeopleInfoList = async function ( idList, peopleInfoList ) {
     for(var j=0; j<peopleInfoList.length; j++) {
       const personInfo = peopleInfoList[j];
       if ( peopleList[i].id === personInfo.id ) {
-        peopleInfoList[j].lastCountWeight = peopleList[i].lastCountWeight;
+        peopleInfoList[j].gapCountWeight = peopleList[i].gapCountWeight;
       }
     }
   }
