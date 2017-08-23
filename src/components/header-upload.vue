@@ -1,7 +1,7 @@
 <template>
   <div id="header-upload" @resize="resizeUpload">
     <h1 class="bold">上傳你的表單</h1>
-    <select class="dropdown col-xs-10 col-xs-offset-1 col-md-4 col-md-offset-4 " v-model="peopleCount">
+    <select class="dropdown col-xs-10 col-xs-offset-1 col-md-4 col-md-offset-4" v-model="peopleCount">
       <option value="1">每班次需1人</option>
       <option value="2">每班次需2人</option>
       <option value="3">每班次需3人</option>
@@ -13,6 +13,7 @@
       <option value="9">每班次需9人</option>
       <option value="10">每班次需10人</option>
     </select>
+    <input type="number" class="col-xs-10 col-xs-offset-1 col-md-4 col-md-offset-4" min="0" max="30" v-model="shiftLimitCount" placeholder="每人班次上限 ( 0或不更動則由系統處理 )">
     <div id="upload-block" class="col-xs-10 col-xs-offset-1 col-md-4 col-md-offset-4">
       <input id="uploadBtn" type="file" class="chooseBtn" accept=".csv" @change="changeUploadPath($event)"/>
       <input id="uploadFile" class="chooseFile" placeholder="上傳Google回覆表單(.csv)" disabled="disabled" v-model="filename"/>
@@ -37,6 +38,7 @@
     data () {
       return {
         peopleCount: 1,
+        shiftLimitCount: '',
         file: '',
         filename: ''
       }
@@ -63,12 +65,25 @@
         }
       },
       startShifting: function () {
-        Compute.shifting(this.file, this.peopleCount);
+        Compute.shifting(this.file, this.peopleCount, this.shiftLimitCount);
       }
     }
   }
 </script>
 <style>
+  ::-webkit-input-placeholder {
+    color: white;
+  }
+  ::-moz-placeholder {
+    color: white;
+  }
+  :-moz-placeholder {
+    color: white;
+  }
+  :-ms-input-placeholder {
+    color: white;
+  }
+
   #header-upload {
     overflow: hidden;
     color: white;
@@ -90,6 +105,15 @@
     border: 5px solid white;
   }
 
+  #header-upload input {
+    font-weight: bold;
+    margin-top: 20px;
+    height: 50px;
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 5px solid white;
+  }
+
   .chooseFile {
     height: 50px;
     font-weight: bold;
@@ -101,7 +125,6 @@
 
   #upload-block {
     padding: 0px;
-    margin-top: 20px;
     margin-bottom: 30px;
 
   }

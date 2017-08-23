@@ -13,9 +13,16 @@ let limitOfEachOneShiftsCount = 0;
 let isUserSetShiftLimit = false;
 const LINES_NUMBER_FROM = 1;
 
-var shifting = function (fileToRead, peopleCount) {
+var shifting = function (fileToRead, peopleCount, limitShiftsCount) {
   peopleCountInShift = peopleCount;
-  // limitOfEachOneShiftsCount = limitShiftsCount;
+
+  if ( limitShiftsCount == 0 || limitShiftsCount == "" ) {
+    isUserSetShiftLimit = false;
+  } else {
+    isUserSetShiftLimit = true;
+    limitOfEachOneShiftsCount = limitShiftsCount;
+  }
+
   var reader = new window.FileReader();
   reader.readAsText(fileToRead); // Read file into memory as UTF-8
   reader.onload = this.loadHandler; // Handle errors load
@@ -44,16 +51,21 @@ var processData = function (csv) {
 var formatData = async function (lines) {
   const peopleCount = lines.length-1;
   let resultTableMap;
-  peopleCountInShift = 5;
 
   let colsAttrList = await FindAttrList.findColsAttr( lines[0] );
   let rowsAttrList = await FindAttrList.findRowsAttr( LINES_NUMBER_FROM, lines, colsAttrList );
   let totalShiftsCount = (colsAttrList.length-1) * rowsAttrList.length;
-  limitOfEachOneShiftsCount = Math.floor( ( peopleCountInShift * totalShiftsCount ) / peopleCount );
-  // limitOfEachOneShiftsCount = 3;
   let rowsMaxNumber = rowsAttrList[rowsAttrList.length-1].number;
   let peopleInfoList = await HandlePeopleInfo.handlePeopleInfo( LINES_NUMBER_FROM, lines, colsAttrList, rowsMaxNumber );
   let peopleAvailableToShiftMap = await HandlePeopleAvailableToShift.peopleAvailableToShift( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
+
+  let average = Math.floor( ( peopleCountInShift * totalShiftsCount ) / peopleCount );
+  if ( isUserSetShiftLimit ) {
+    if ( limitOfEachOneShiftsCount > average )
+      limitOfEachOneShiftsCount = average;
+  } else {
+    limitOfEachOneShiftsCount = average;
+  }
 
   let result1 = await HandlePeopleCountUnderLimitInToResultTable.peopleCountUnderLimitInToResultTable( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber, peopleCountInShift, limitOfEachOneShiftsCount );
   resultTableMap = result1.resultTableMap;
