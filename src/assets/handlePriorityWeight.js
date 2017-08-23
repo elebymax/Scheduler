@@ -2,10 +2,10 @@
  * Created by max on 2017/8/23.
  */
 
-exports.priorityRank = async function ( peopleInfoList, peopleAvailableToShiftMap, colsCount, rowsCount ) {
+exports.priorityWeight = async function ( peopleInfoList, peopleAvailableToShiftMap, colsCount, rowsCount ) {
 
   for (var i=0; i<peopleInfoList.length; i++ ) {
-    peopleInfoList[i].continuousRankMap = await makeEmptyMap(colsCount, rowsCount);
+    peopleInfoList[i].continuousWeightMap = await makeEmptyMap(colsCount, rowsCount);
   }
 
   for (var i=0; i<colsCount; i++) {
@@ -39,14 +39,14 @@ var handleLastCountPeopleInfoList = async function ( idList, peopleInfoList ) {
     return a.lastCount < b.lastCount ? 1 : -1;
   });
 
-  let rank = 0;
+  let weight = 0;
   for(var i=0; i<peopleList.length; i++) {
     if ( i === 0 ) {
-      peopleList[i].lastCountRank = 0;
+      peopleList[i].lastCountWeight = 0;
     } else if ( peopleList[i].lastCount === peopleList[i-1].lastCount ) {
-      peopleList[i].lastCountRank = rank;
+      peopleList[i].lastCountWeight = weight;
     } else {
-      peopleList[i].lastCountRank = ++rank;
+      peopleList[i].lastCountWeight = ++weight;
     }
   }
 
@@ -54,7 +54,7 @@ var handleLastCountPeopleInfoList = async function ( idList, peopleInfoList ) {
     for(var j=0; j<peopleInfoList.length; j++) {
       const personInfo = peopleInfoList[j];
       if ( peopleList[i].id === personInfo.id ) {
-        peopleInfoList[j].lastCountRank = peopleList[i].lastCountRank;
+        peopleInfoList[j].lastCountWeight = peopleList[i].lastCountWeight;
       }
     }
   }
@@ -71,7 +71,7 @@ var handleContinuousPeopleInfoList = async function ( idList, peopleInfoList, co
       if ( idList[k] === personInfo.id ) {
         const continuous = {
           id: personInfo.id,
-          continuousRank: personInfo.priorityMap[i][j]
+          continuousWeight: personInfo.priorityMap[i][j]
         };
         peopleList.push(continuous)
       }
@@ -79,17 +79,17 @@ var handleContinuousPeopleInfoList = async function ( idList, peopleInfoList, co
   }
 
   peopleList = peopleList.sort(function (a, b) {
-    return a.continuousRank > b.continuousRank ? 1 : -1;
+    return a.continuousWeight > b.continuousWeight ? 1 : -1;
   });
 
-  let rank = 0;
+  let weight = 0;
   for(var k=0; k<peopleList.length; k++) {
     if ( k === 0 ) {
-      peopleList[k].continuousRank = 0;
-    } else if ( peopleList[k].continuousRank === peopleList[k-1].continuousRank ) {
-      peopleList[k].continuousRank = rank;
+      peopleList[k].continuousWeight = 0;
+    } else if ( peopleList[k].continuousWeight === peopleList[k-1].continuousWeight ) {
+      peopleList[k].continuousWeight = weight;
     } else {
-      peopleList[k].continuousRank = ++rank;
+      peopleList[k].continuousWeight = ++weight;
     }
   }
 
@@ -97,7 +97,7 @@ var handleContinuousPeopleInfoList = async function ( idList, peopleInfoList, co
     for (var l=0; l<peopleInfoList.length; l++) {
       const personInfo = peopleInfoList[l];
       if ( peopleList[k].id === personInfo.id ) {
-        peopleInfoList[l].continuousRankMap[i][j] = peopleList[k].continuousRank;
+        peopleInfoList[l].continuousWeightMap[i][j] = peopleList[k].continuousWeight;
       }
     }
   }

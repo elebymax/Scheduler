@@ -7,7 +7,7 @@ var HandlePeopleInfo = require('./handlePeopleInfo');
 var HandlePeopleAvailableToShift = require('./handlePeopleAvailableToShift');
 var HandlePeoplePriority = require('./handlePeoplePriority');
 var HandlePeopleCountUnderLimitInToResultTable = require('./handlePeopleCountUnderLimitInToResultTable');
-var HandlePriorityRank = require('./handlePriorityRank');
+var HandlePriorityWeight = require('./handlePriorityWeight');
 
 var peopleCountInShift = 0; //每班需要幾人
 const LINES_NUMBER_FROM = 1;
@@ -44,19 +44,20 @@ var formatData = async function (lines) {
   let resultTableMap = [];
   peopleCountInShift = 20;
 
-  let colsAttrList = await FindAttrList.findColsAttr(lines[0]);
-  let rowsAttrList = await FindAttrList.findRowsAttr(LINES_NUMBER_FROM, lines, colsAttrList);
+  let colsAttrList = await FindAttrList.findColsAttr( lines[0] );
+  let rowsAttrList = await FindAttrList.findRowsAttr( LINES_NUMBER_FROM, lines, colsAttrList );
   let totalShiftsCount = (colsAttrList.length-1) * rowsAttrList.length;
   let limitOfEachOneShiftsCount = Math.floor( ( peopleCountInShift * totalShiftsCount ) / peopleCount );
   let rowsMaxNumber = rowsAttrList[rowsAttrList.length-1].number;
-  let peopleInfoList = await HandlePeopleInfo.handlePeopleInfo(LINES_NUMBER_FROM, lines, colsAttrList, rowsMaxNumber);
+  let peopleInfoList = await HandlePeopleInfo.handlePeopleInfo( LINES_NUMBER_FROM, lines, colsAttrList, rowsMaxNumber );
   let peopleAvailableToShiftMap = await HandlePeopleAvailableToShift.peopleAvailableToShift( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
   peopleInfoList = await HandlePeoplePriority.peoplePriorityList( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
   let result = await HandlePeopleCountUnderLimitInToResultTable.peopleCountUnderLimitInToResultTable( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber, peopleCountInShift, limitOfEachOneShiftsCount );
   resultTableMap = result.resultTableMap;
   peopleInfoList = result.peopleInfoList;
   peopleAvailableToShiftMap = result.peopleAvailableToShiftMap;
-  peopleInfoList = await HandlePriorityRank.priorityRank( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber );
+  peopleInfoList = await HandlePriorityWeight.priorityWeight( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber );
+
 
   console.log(peopleInfoList);
 };
