@@ -33,13 +33,12 @@ exports.handleResultTable = async function ( resultTable, peopleInfo, peopleAvai
 };
 
 var handlePersonPriority = async function ( idList, peopleInfoList, currentCol, currentRow ) {
-  let priority = 0;
 
   for(var k=0; k<idList.length; k++) {
     for(var l=0; l<peopleInfoList.length; l++) {
       const personInfo = peopleInfoList[l];
       if ( idList[k] === personInfo.id ) {
-
+        let priority = 0;
         if ( personInfo.shiftsMap[currentCol][currentRow] === 1 ) {
           try {
             if ( resultTableMap[currentCol][currentRow-1].includes( personInfo.id ) ) {
@@ -100,6 +99,8 @@ let handlePriorityRanking = async function ( idList, currentCol, currentRow, peo
   }
 
   if ( !isUserSetShiftLimit ) {
+    peopleList = peopleList.filter(val => !resultList.includes(val.id));
+
     peopleList = peopleList.sort(function (a, b) {
       return a.usedCount > b.usedCount ? 1 : -1;
     });
