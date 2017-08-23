@@ -20,14 +20,10 @@ exports.handleResultTable = async function ( resultTable, peopleInfo, peopleAvai
       peopleInfoList = await handlePersonPriority( idList, peopleInfoList, i, j );
       peopleInfoList = await handleContinuousPeopleInfoList( idList, peopleInfoList, colsCount, rowsCount, i, j );
       peopleInfoList = await handleLastCountPeopleInfoList( idList, peopleInfoList );
-      resultTableMap[i][j] = await priorityRanking( idList, i, j, peopleCountInShift, limitOfEachOneShiftsCount, isUserSetShiftLimit );
+      resultTableMap[i][j] = await handlePriorityRanking( idList, i, j, peopleCountInShift, limitOfEachOneShiftsCount, isUserSetShiftLimit );
       peopleAvailableToShiftMap[i][j] = peopleAvailableToShiftMap[i][j].filter(val => !resultTableMap[i][j].includes(val));
     }
   }
-
-  console.log(peopleAvailableToShiftMap);
-  console.log(peopleInfoList);
-  console.log(resultTableMap);
 
   return Promise.resolve({
     resultTableMap,
@@ -64,7 +60,7 @@ var handlePersonPriority = async function ( idList, peopleInfoList, currentCol, 
   return Promise.resolve(peopleInfoList);
 };
 
-let priorityRanking = async function ( idList, currentCol, currentRow, peopleCountInShift, limitOfEachOneShiftsCount, isUserSetShiftLimit ) {
+let handlePriorityRanking = async function ( idList, currentCol, currentRow, peopleCountInShift, limitOfEachOneShiftsCount, isUserSetShiftLimit ) {
   let peopleList = [];
 
   for(var k=0; k<idList.length; k++) {
