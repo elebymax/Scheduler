@@ -12,7 +12,7 @@ var HandleResultTable = require('./handleResultTable');
 
 let peopleCountInShift = 0; //每班需要幾人
 let limitOfEachOneShiftsCount = 0;
-let isUserSetShiftLimit = false;
+let isUserSetShiftLimit = true;
 const LINES_NUMBER_FROM = 1;
 
 var shifting = function (fileToRead, peopleCount) {
@@ -46,7 +46,7 @@ var processData = function (csv) {
 var formatData = async function (lines) {
   const peopleCount = lines.length-1;
   let resultTableMap = [];
-  peopleCountInShift = 8;
+  peopleCountInShift = 5;
 
   let colsAttrList = await FindAttrList.findColsAttr( lines[0] );
   let rowsAttrList = await FindAttrList.findRowsAttr( LINES_NUMBER_FROM, lines, colsAttrList );
@@ -55,14 +55,14 @@ var formatData = async function (lines) {
   let rowsMaxNumber = rowsAttrList[rowsAttrList.length-1].number;
   let peopleInfoList = await HandlePeopleInfo.handlePeopleInfo( LINES_NUMBER_FROM, lines, colsAttrList, rowsMaxNumber );
   let peopleAvailableToShiftMap = await HandlePeopleAvailableToShift.peopleAvailableToShift( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
-  peopleInfoList = await HandlePeoplePriority.peoplePriorityList( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
+  // peopleInfoList = await HandlePeoplePriority.peoplePriorityList( peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
 
   let result1 = await HandlePeopleCountUnderLimitInToResultTable.peopleCountUnderLimitInToResultTable( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber, peopleCountInShift, limitOfEachOneShiftsCount );
   resultTableMap = result1.resultTableMap;
   peopleInfoList = result1.peopleInfoList;
   peopleAvailableToShiftMap = result1.peopleAvailableToShiftMap;
 
-  peopleInfoList = await HandlePriorityWeight.priorityWeight( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber );
+  // peopleInfoList = await HandlePriorityWeight.priorityWeight( peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber );
 
   let result2 = await HandleResultTable.handleResultTable( resultTableMap, peopleInfoList, peopleAvailableToShiftMap, colsAttrList.length-1, rowsMaxNumber, peopleCountInShift, limitOfEachOneShiftsCount, isUserSetShiftLimit );
   resultTableMap = result2.resultTableMap;
