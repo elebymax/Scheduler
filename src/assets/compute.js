@@ -80,8 +80,8 @@ var formatData = async function (lines) {
 
   resultTableMap = await HandleChangeIdToName.changeIdToName( resultTableMap, peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
 
-  console.log(resultTableMap);
-  console.log(peopleInfoList);
+  // console.log(resultTableMap);
+  // console.log(peopleInfoList);
 };
 
 var compute = {
