@@ -69,6 +69,7 @@ let handlePriorityRanking = async function ( idList, currentCol, currentRow, peo
       if ( idList[k] === personInfo.id ) {
         const person = {
           id: personInfo.id,
+          usedCount: personInfo.usedCount,
           priorityRank: parseInt(personInfo.gapCountWeight) + parseInt(personInfo.continuousWeightMap[currentCol][currentRow])
         };
         peopleList.push(person);
@@ -99,6 +100,10 @@ let handlePriorityRanking = async function ( idList, currentCol, currentRow, peo
   }
 
   if ( !isUserSetShiftLimit ) {
+    peopleList = peopleList.sort(function (a, b) {
+      return a.usedCount > b.usedCount ? 1 : -1;
+    });
+
     for(var k=0; k<peopleList.length; k++) {
       for (var l=0; l<peopleInfoList.length; l++) {
         const personInfo = peopleInfoList[l];
