@@ -11,8 +11,8 @@ exports.priorityWeight = async function ( peopleInfoList, peopleAvailableToShift
   for (var i=0; i<colsCount; i++) {
     for (var j=0; j<rowsCount; j++) {
       let idList = peopleAvailableToShiftMap[i][j];
-      peopleInfoList = await handleLastCountPeopleInfoList( idList, peopleInfoList );
       peopleInfoList = await handleContinuousPeopleInfoList( idList, peopleInfoList, colsCount, rowsCount, i, j );
+      peopleInfoList = await handleLastCountPeopleInfoList( idList, peopleInfoList );
     }
   }
 
