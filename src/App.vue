@@ -12,6 +12,7 @@
         </transition>
       </div>
     </header>
+    <like></like>
     <intro></intro>
     <div id="start" style="">
       <div class="mask">
@@ -29,6 +30,7 @@
 <script type="es6">
   import headerContent from './components/header-content'
   import headerUpload from './components/header-upload'
+  import like from './components/like'
   import intro from './components/intro'
   import quickStart from './components/quick-start'
   import testing from './components/testing'
@@ -48,7 +50,8 @@
       headerUpload,
       intro,
       quickStart,
-      testing
+      testing,
+      like
     },
     methods: {
       toggle: function() {
