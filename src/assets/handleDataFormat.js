@@ -16,6 +16,35 @@ exports.changeIdToName = async function ( resultTableMap, peopleInfoList, colsCo
   return Promise.resolve( resultTable );
 };
 
+exports.changeMapToTable = async function( resultTableMap, colsAttrList, rowsAttrList, colsCount, rowsCount ) {
+  let table = [];
+  let AttrRow = [];
+
+  for (var i=0; i<colsCount; i++) {
+    AttrRow.push( colsAttrList[i+1].name );
+  }
+  AttrRow.unshift(" ");
+  table.push(AttrRow);
+
+  for (var i=0; i<rowsCount; i++) {
+    table.push([]);
+  }
+
+  for (var i=0; i<rowsCount; i++) {
+    table[i+1][0] = rowsAttrList[i].name;
+    for (var j=0; j<colsCount; j++) {
+      let names = "";
+      for (var k=0; k<resultTableMap[j][i].length; k++) {
+        if(k!=0) names+="; ";
+        names += resultTableMap[j][i][k];
+      }
+      table[i+1][j+1] = names;
+    }
+  }
+
+  return Promise.resolve(table);
+};
+
 var findPersonInfo = function ( id, peopleInfoList ) {
   for (var i=0; i<peopleInfoList.length; i++) {
     if ( id == peopleInfoList[i].id ) {
@@ -25,12 +54,12 @@ var findPersonInfo = function ( id, peopleInfoList ) {
 };
 
 var makeEmptyMap = async function ( colsCount, rowsCount ) {
-  let peopleAvailableToShiftMap = [];
+  let emptyMap = [];
   for (var i=0; i<colsCount; i++) {
-    peopleAvailableToShiftMap.push([]);
+    emptyMap.push([]);
     for(var j=0; j<rowsCount; j++  ) {
-      peopleAvailableToShiftMap[i].push([]);
+      emptyMap[i].push([]);
     }
   }
-  return Promise.resolve(peopleAvailableToShiftMap);
+  return Promise.resolve(emptyMap);
 };

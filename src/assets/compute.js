@@ -79,6 +79,7 @@ var formatData = async function (lines) {
   peopleAvailableToShiftMap = result2.peopleAvailableToShiftMap;
 
   resultTableMap = await HandleDataFormat.changeIdToName( resultTableMap, peopleInfoList, colsAttrList.length-1, rowsMaxNumber );
+  let resultTable = await HandleDataFormat.changeMapToTable( resultTableMap, colsAttrList, rowsAttrList, colsAttrList.length-1, rowsMaxNumber );
 
   // console.log(resultTableMap);
   // console.log(peopleInfoList);
